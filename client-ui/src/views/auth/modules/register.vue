@@ -11,14 +11,6 @@ import RuleView from '@/components/common/RuleView/RuleView.vue'
 import {fetchRegisterUser, RegisterBody} from '@/server/api/auth'
 import {ROUTE_NAME} from "@/router/routes";
 
-// interface Model {
-//   userName: string
-//   // email: string
-//   password: string
-//   rePassword: string
-//   // captcha: string
-// }
-
 type Model = RegisterBody & { rePassword: string }
 
 const model = reactive<Model>({
@@ -64,17 +56,6 @@ const rules: FormRules = {
       validator: getRuleValidator(userNameRules)
     }
   ],
-  // email: [
-  //   {
-  //     required: true,
-  //     trigger: ['blur', 'input'],
-  //     validator(rule, value) {
-  //       if (!value || value === '') return new Error('邮箱不能为空')
-  //       return new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(value) ? true : new Error('请输入正确的邮箱')
-  //     }
-  //   }
-  // ],
-  // captcha: [{ required: true, trigger: 'blur', message: '验证码不能为空' }],
   password: [
     {
       required: true,
@@ -96,35 +77,9 @@ const rules: FormRules = {
 
 const message = useMessage()
 const router = useRouter()
-const captchaSend = ref<boolean>(false)
-const captchaLoading = ref<boolean>(false)
-const captchaLoadingSecond = ref<number>(0)
 const submitLoading = ref<boolean>(false)
 
 const formRef = ref<FormInst>()
-const emailFormRef = ref<FormItemInst>()
-
-// async function fetchCaptcha() {
-//   try {
-//     if (emailFormRef.value) await emailFormRef.value.validate()
-//   } catch {
-//     return
-//   }
-//   captchaLoading.value = true
-//   const { error, response } = await fetchEmailRegisterCaptcha(model.email)
-//   captchaLoading.value = false
-//   if (error) {
-//     message.error(`验证码发送失败：${response.data.message}`)
-//     return
-//   }
-//   captchaSend.value = true
-//   captchaLoadingSecond.value = 60
-//   const timer = setInterval(() => {
-//     captchaLoadingSecond.value--
-//     if (captchaLoadingSecond.value <= 0) clearInterval(timer)
-//   }, 1000)
-// }
-
 async function submit() {
   try {
     if (formRef.value) await formRef.value.validate()
@@ -175,19 +130,6 @@ async function toLogin() {
         </template>
       </NPopover>
     </NFormItem>
-<!--    <NFormItem path="email" ref="emailFormRef">-->
-<!--      <NInput placeholder="请输入邮箱号" v-model:value="model.email">-->
-<!--        <template #prefix><OhVueIcon name="hi-mail" scale="1.1" fill="gray"></OhVueIcon></template>-->
-<!--      </NInput>-->
-<!--    </NFormItem>-->
-<!--    <NFormItem path="captcha">-->
-<!--      <NInput :placeholder="captchaSend ? '请输入验证码' : '请获取验证码'" :disabled="!captchaSend" v-model:value="model.captcha">-->
-<!--        <template #prefix><OhVueIcon name="hi-code" scale="1.1" fill="gray"></OhVueIcon></template>-->
-<!--      </NInput>-->
-<!--      <NButton class="ml-1" :disabled="captchaLoadingSecond > 0" v-model:loading="captchaLoading" @click="fetchCaptcha">-->
-<!--        {{ captchaLoading ? '发送中' : captchaLoadingSecond > 0 ? `${captchaLoadingSecond}秒` : '发送验证码' }}-->
-<!--      </NButton>-->
-<!--    </NFormItem>-->
     <NFormItem path="password">
       <NPopover placement="top-start" trigger="focus" display-directive="show">
         <template #trigger>
